@@ -2,213 +2,88 @@
 
 ## Overview
 
-The Payment Gateway Platform is designed as a **modular, production-ready system** that supports:
-
-* Merchant dashboards
-* Public checkout flow
-* Secure payment processing
-* Asynchronous payment status updates
-* Clear separation between merchant and public access
-
-The system follows a **service-oriented, containerized architecture** using Docker.
+The Payment Gateway Platform is a modular, production-ready system designed to handle merchant operations and public payment flows. It utilizes a service-oriented, containerized architecture to ensure security, scalability, and clear separation of concerns.
 
 ---
 
 ## High-Level Architecture
 
-The platform consists of **four major components**:
+The platform consists of four primary components isolated via Docker:
 
-1. **Merchant Dashboard (Frontend)**
-2. **Checkout Application (Public Frontend)**
-3. **Backend API (Payment Gateway Service)**
-4. **PostgreSQL Database**
-
-Each component is isolated, scalable, and communicates through well-defined interfaces.
-
----
-
-## Architecture Diagram
-
-```text
-docs/images/architecture.png
-```
+1. **Merchant Dashboard:** Private frontend for business operations.
+2. **Checkout Application:** Public frontend for customer transactions.
+3. **Backend API:** Core service handling business logic and security.
+4. **PostgreSQL Database:** Persistent storage for all platform data.
 
 ---
 
 ## Component Breakdown
 
-### 1. Merchant Dashboard (Frontend)
+### 1. Merchant Dashboard
 
-**Port:** `3000`
-**Technology:** React.js
+* **Port:** `3000` | **Tech:** React.js
+* **Responsibilities:** Merchant authentication, API credential management, transaction analytics, and history.
+* **Communication:** Uses authenticated requests via `X-Api-Key` and `X-Api-Secret` headers.
 
-**Responsibilities:**
+### 2. Checkout Application (Public)
 
-* Merchant login
-* Display API credentials
-* Dashboard analytics (transactions, amount, success rate)
-* View transactions list
-* Secure API access using API Key & Secret
-
-**Communication:**
-
-* Talks to Backend API using authenticated requests
-* Uses `X-Api-Key` and `X-Api-Secret` headers
-
----
-
-### 2. Checkout Application (Public Frontend)
-
-**Port:** `3001`
-**Technology:** React.js
-
-**Responsibilities:**
-
-* Accept `order_id` via URL
-* Fetch public order details
-* Display payment UI (UPI / Card)
-* Create payments using public APIs
-* Poll payment status
-* Redirect to success or failure pages
-
-**Security Model:**
-
-* No authentication headers
-* Access validated using `order_id` ownership on backend
-
----
+* **Port:** `3001` | **Tech:** React.js
+* **Responsibilities:** Fetching order details, rendering Payment UI (UPI/Card), and polling payment status.
+* **Security:** Public access; validates requests via `order_id` context.
 
 ### 3. Backend API (Payment Gateway Service)
 
-**Port:** `8000`
-**Technology:** Node.js + Express
-
-**Core Responsibilities:**
-
-* Merchant authentication (API Key & Secret)
-* Order management
-* Payment creation and validation
-* Payment processing simulation
-* Payment status polling
-* Public checkout endpoints
-* Data validation and error handling
-
-**Key Design Principles:**
-
-* RESTful APIs
-* Clear separation between public and protected routes
-* Stateless request handling
-* Centralized business logic (services layer)
-
----
+* **Port:** `8000` | **Tech:** Node.js + Express
+* **Responsibilities:** Request validation, merchant authentication, payment simulation, and state management.
+* **Design:** Stateless RESTful architecture with a dedicated services layer.
 
 ### 4. Database (PostgreSQL)
 
-**Port:** `5432`
-**Technology:** PostgreSQL 15
-
-**Responsibilities:**
-
-* Store merchants
-* Store orders
-* Store payments
-* Maintain relationships and integrity
-* Track payment status changes
-
-**Key Features:**
-
-* Foreign key constraints
-* Indexed IDs
-* Transaction-safe updates
-* Supports analytics queries
+* **Port:** `5432` | **Tech:** PostgreSQL 15
+* **Responsibilities:** Relational storage for Merchants, Orders, and Payments.
+* **Integrity:** Uses foreign keys, indexing, and transaction-safe updates.
 
 ---
 
 ## Data Flow
 
-### Merchant Dashboard Flow
+### Merchant Operations
 
-1. Merchant logs in
-2. Dashboard fetches payments using authenticated API
-3. Backend validates API key & secret
-4. Backend fetches data from database
-5. Dashboard renders analytics and transactions
+1. Merchant Dashboard requests data using **API Key/Secret**.
+2. Backend validates credentials against the database.
+3. Backend returns filtered transaction and analytics data.
 
----
+### Transaction Flow
 
-### Checkout Flow
-
-1. User opens checkout page with `order_id`
-2. Checkout app fetches order using public API
-3. User selects payment method
-4. Payment is created via public endpoint
-5. Backend validates order ownership
-6. Payment status is set to `processing`
-7. Backend simulates processing
-8. Status updates to `success` or `failed`
-9. Checkout app polls status
-10. User is redirected to success or failure page
+1. User enters checkout via `order_id`.
+2. Checkout app fetches public order details.
+3. Payment created via **Public API** (status: `processing`).
+4. Backend simulates processing and updates status to `success` or `failed`.
+5. Checkout app polls status and redirects user accordingly.
 
 ---
 
-## Security Architecture
+## Security & Data Protection
 
-### Merchant APIs
-
-* Protected using API Key + API Secret
-* Requests without valid credentials are rejected
-
-### Checkout APIs
-
-* Public endpoints
-* Validate `order_id` belongs to a valid merchant
-* No sensitive merchant data exposed
-
-### Data Protection
-
-* No card details stored
-* Only last 4 digits and card network saved
-* CVV never persisted
+* **Authentication:** Strictly enforced for all merchant endpoints.
+* **Card Security:** No full card numbers or CVVs are stored; only the last 4 digits and network are persisted.
+* **Public Safety:** Checkout APIs expose only the minimum necessary data to complete a transaction.
 
 ---
 
-## Deployment Architecture (Docker)
+## Deployment Configuration (Docker)
 
-All services are containerized using Docker Compose:
-
-| Service           | Container Name   | Port |
-| ----------------- | ---------------- | ---- |
-| PostgreSQL        | pg_gateway       | 5432 |
-| Backend API       | gateway_api      | 8000 |
-| Merchant Frontend | gateway_frontend | 3000 |
-| Checkout Frontend | gateway_checkout | 3001 |
-
-**Benefits:**
-
-* One-command startup
-* Environment consistency
-* Easy scaling
-* Clear service isolation
+| Service | Container Name | Port |
+| --- | --- | --- |
+| **PostgreSQL** | `pg_gateway` | 5432 |
+| **Backend API** | `gateway_api` | 8000 |
+| **Merchant Frontend** | `gateway_frontend` | 3000 |
+| **Checkout Frontend** | `gateway_checkout` | 3001 |
 
 ---
 
-## Scalability Considerations
+## Future Scalability
 
-* Backend is stateless → horizontally scalable
-* Database can be upgraded to managed PostgreSQL
-* Frontends can be deployed behind CDN
-* Payment processing logic can be replaced with real gateways
-
----
-
-## Summary
-
-This architecture ensures:
-
-* Strong separation of concerns
-* Secure merchant operations
-* Safe public checkout experience
-* Production-grade extensibility
-* Easy deployment and evaluation
-
----
+* **Horizontal Scaling:** Backend is stateless and can be scaled behind a load balancer.
+* **Persistence:** Easily migrates to managed RDS/PostgreSQL instances.
+* **Delivery:** Frontends are optimized for CDN deployment.
