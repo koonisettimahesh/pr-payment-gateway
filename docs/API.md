@@ -1,32 +1,35 @@
+---
+
 # Payment Gateway API Documentation
 
-Base URL:
+**Base URL:**
+
+```
 http://localhost:8000
+```
 
 ---
 
 ## Authentication
 
-All **merchant-protected endpoints** require the following headers:
+* **Merchant-protected endpoints** require the following headers:
 
 ```http
-
 X-Api-Key: <merchant_api_key>
 X-Api-Secret: <merchant_api_secret>
-
 ```
 
-Public checkout endpoints **do not require authentication**.
+* **Public checkout endpoints** do **not require authentication**.
 
 ---
 
 ## Health Check
 
-### GET /health
+### GET `/health`
 
 Checks application and database health.
 
-**Response – 200**
+**Response – 200 OK**
 
 ```json
 {
@@ -38,11 +41,13 @@ Checks application and database health.
 
 ---
 
-## Create Order
+## Orders
 
-### POST /api/v1/orders
+### Create Order
 
-**Headers**
+**POST** `/api/v1/orders`
+
+**Headers:**
 
 ```
 X-Api-Key: key_test_abc123
@@ -50,7 +55,7 @@ X-Api-Secret: secret_test_xyz789
 Content-Type: application/json
 ```
 
-**Request Body**
+**Request Body:**
 
 ```json
 {
@@ -63,7 +68,7 @@ Content-Type: application/json
 }
 ```
 
-**Response – 201**
+**Response – 201 Created**
 
 ```json
 {
@@ -82,18 +87,18 @@ Content-Type: application/json
 
 ---
 
-## Get Order
+### Get Order
 
-### GET /api/v1/orders/{order_id}
+**GET** `/api/v1/orders/{order_id}`
 
-**Headers**
+**Headers:**
 
 ```
 X-Api-Key: key_test_abc123
 X-Api-Secret: secret_test_xyz789
 ```
 
-**Response – 200**
+**Response – 200 OK**
 
 ```json
 {
@@ -109,13 +114,13 @@ X-Api-Secret: secret_test_xyz789
 
 ---
 
-## Public Order (Checkout)
+### Get Public Order (Checkout)
 
-### GET /api/v1/orders/{order_id}/public
+**GET** `/api/v1/orders/{order_id}/public`
 
-Used by the hosted checkout page (no authentication).
+Used by hosted checkout pages. **No authentication required.**
 
-**Response – 200**
+**Response – 200 OK**
 
 ```json
 {
@@ -128,17 +133,19 @@ Used by the hosted checkout page (no authentication).
 
 ---
 
-## Create Payment (Public – Checkout)
+## Payments
 
-### POST /api/v1/payments/public
+### Create Payment (Public – Checkout)
 
-Creates a payment from the hosted checkout page.
+**POST** `/api/v1/payments/public`
+
+Creates a payment from the hosted checkout page. **No authentication required.**
 
 ---
 
-### UPI Payment
+#### UPI Payment
 
-**Request Body**
+**Request Body:**
 
 ```json
 {
@@ -148,7 +155,7 @@ Creates a payment from the hosted checkout page.
 }
 ```
 
-**Response – 201**
+**Response – 201 Created**
 
 ```json
 {
@@ -159,9 +166,9 @@ Creates a payment from the hosted checkout page.
 
 ---
 
-### Card Payment
+#### Card Payment
 
-**Request Body**
+**Request Body:**
 
 ```json
 {
@@ -177,7 +184,7 @@ Creates a payment from the hosted checkout page.
 }
 ```
 
-**Response – 201**
+**Response – 201 Created**
 
 ```json
 {
@@ -188,18 +195,18 @@ Creates a payment from the hosted checkout page.
 
 ---
 
-## Get Payment Status
+### Get Payment Status
 
-### GET /api/v1/payments/{payment_id}
+**GET** `/api/v1/payments/{payment_id}`
 
-**Headers**
+**Headers:**
 
 ```
 X-Api-Key: key_test_abc123
 X-Api-Secret: secret_test_xyz789
 ```
 
-**Response – 200**
+**Response – 200 OK**
 
 ```json
 {
@@ -218,11 +225,11 @@ X-Api-Secret: secret_test_xyz789
 
 ## Test Merchant Endpoint
 
-### GET /api/v1/test/merchant
+### GET `/api/v1/test/merchant`
 
 Returns seeded test merchant details.
 
-**Response – 200**
+**Response – 200 OK**
 
 ```json
 {
@@ -248,7 +255,7 @@ All errors follow this format:
 }
 ```
 
-### Supported Error Codes
+**Supported Error Codes:**
 
 | Code                 | Description               |
 | -------------------- | ------------------------- |
@@ -264,7 +271,11 @@ All errors follow this format:
 
 ## Notes
 
-* Amounts are stored in **paise** (₹500 = 50000)
-* Payments skip `created` state and start at `processing`
-* CVV and full card numbers are **never stored**
-* Public checkout APIs are unauthenticated by design
+* Amounts are stored in **paise** (₹500 = 50000).
+* Payments skip the `created` state and start at `processing`.
+* CVV and full card numbers are **never stored**.
+* Public checkout APIs are unauthenticated by design.
+
+---
+
+Do you want me to add that?
