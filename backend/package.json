@@ -9,7 +9,7 @@
     "start": "node src/server.js"
   },
   "keywords": [],
-  "author": "P. D. S. Aravind Kumar",
+  "author": "K.Mahesh",
   "license": "ISC",
   "description": "",
   "dependencies": {
