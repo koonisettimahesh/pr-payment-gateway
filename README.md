@@ -1,38 +1,38 @@
+---
+
 # Payment Gateway Platform – Multi-Method Processing & Hosted Checkout
 
-## Project Description
+A **production-ready Payment Gateway platform** inspired by **Razorpay** and **Stripe**, designed for merchants to create orders via APIs and for customers to pay through a **hosted checkout page** supporting **UPI** and **Card payments**.
 
-This project is a **production-ready Payment Gateway platform** inspired by real-world systems like **Razorpay** and **Stripe**.
-
-It enables merchants to securely create payment orders via APIs and allows customers to complete payments through a **hosted checkout page** supporting **UPI** and **Card** payments.
-
-The system is designed with clean architecture, strict validation logic, and realistic payment lifecycle management, making it suitable for **fintech learning**, **backend system design evaluation**, and **full-stack development demonstrations**.
+Ideal for **fintech learning**, **backend system design demonstrations**, and **full-stack development projects**.
 
 ---
 
-## Key Features
+## Features
 
-- Merchant authentication using **API Key & API Secret**
-- Automatic **test merchant seeding** on startup
-- Secure **order creation and retrieval APIs**
-- **Multi-method payment processing**
-  - **UPI payments**
-    - VPA validation
-  - **Card payments**
-    - Luhn algorithm validation
-    - Expiry date validation
-    - Card network detection (Visa, Mastercard, Amex, RuPay)
-- **Hosted Checkout Page** for customers
-- **Payment lifecycle management**
-  - `processing → success / failed`
-- **Deterministic Test Mode** for predictable success/failure
-- **Merchant Dashboard**
-  - API credentials
-  - Transaction statistics
-  - Transaction history
-- Fully **Dockerized architecture** with one-command startup
-- **Health check endpoint** for service monitoring
-- Responsive and clean UI for dashboard and checkout
+* **Merchant Authentication**
+
+  * API Key & Secret
+  * Auto-seeded test merchant on startup
+* **Order Management**
+
+  * Create, retrieve, and monitor orders via backend API
+* **Multi-Method Payments**
+
+  * **UPI**: VPA validation
+  * **Cards**: Luhn validation, expiry check, network detection (Visa, Mastercard, Amex, RuPay)
+* **Hosted Checkout Page** for customers
+* **Payment Lifecycle**
+
+  * `processing → success / failed`
+  * Deterministic Test Mode for predictable outcomes
+* **Merchant Dashboard**
+
+  * View API credentials
+  * Transaction stats & history
+* **Dockerized Architecture** for one-command startup
+* **Health Check Endpoint** for monitoring
+* Responsive UI for both dashboard and checkout
 
 ---
 
@@ -47,46 +47,45 @@ cd payment-gateway
 docker-compose up -d --build
 ```
 
+### Access URLs
 
-## Access URLs
+| Service            | URL                                                                                                  |
+| ------------------ | ---------------------------------------------------------------------------------------------------- |
+| Merchant Dashboard | [http://localhost:3000](http://localhost:3000)                                                       |
+| Hosted Checkout    | [http://localhost:3001/checkout?order_id=ORDER_ID](http://localhost:3001/checkout?order_id=ORDER_ID) |
+| Backend API        | [http://localhost:8000](http://localhost:8000)                                                       |
+| Health Check       | [http://localhost:8000/health](http://localhost:8000/health)                                         |
 
-| Service | URL |
-|--------|-----|
-| Merchant Dashboard | http://localhost:3000 |
-| Checkout Page | http://localhost:3001/checkout?order_id=ORDER_ID |
-| Backend API | http://localhost:8000 |
-| Health Check | http://localhost:8000/health |
+---
 
+## Demo Video
 
-## Demo Video : 
-
-    https://drive.google.com/file/d/1qnAQA95StjVnTD4pBCNtRbydoR7L8rI5/view?usp=sharing
+[Watch Demo](https://drive.google.com/file/d/1qnAQA95StjVnTD4pBCNtRbydoR7L8rI5/view?usp=sharing)
 
 ---
 
 ## Test Merchant Credentials
 
-The application automatically seeds a **test merchant** on startup.
+Auto-seeded on startup:
 
-Email: test@example.com
+* **Email:** [test@example.com](mailto:test@example.com)
+* **API Key:** key_test_abc123
+* **API Secret:** secret_test_xyz789
 
-API Key: key_test_abc123  
-API Secret: secret_test_xyz789  
-
-Use these credentials for all authenticated API requests and dashboard access.
+Use for all API requests and dashboard access.
 
 ---
 
 ## Test Payment Details
 
-### UPI
+**UPI:**
 
 ```text
 user@paytm
 test@phonepe
 ```
 
-### Card (Visa – Recommended)
+**Card (Visa – Recommended):**
 
 ```text
 Card Number: 4111 1111 1111 1111
@@ -95,6 +94,7 @@ CVV: 123
 Name: Test User
 ```
 
+---
 
 ## Project Structure
 
@@ -109,61 +109,34 @@ Name: Test User
 
 ---
 
-## Services
+## Services & Ports
 
-| Service | Port | Description |
-|--------|------|-------------|
-| Backend API | 8000 | Payment gateway logic |
-| Dashboard | 3000 | Merchant-facing UI |
-| Checkout | 3001 | Customer payment UI |
-| PostgreSQL | 5432 | Persistent database |
+| Service            | Port | Description           |
+| ------------------ | ---- | --------------------- |
+| Backend API        | 8000 | Payment gateway logic |
+| Merchant Dashboard | 3000 | Merchant UI           |
+| Hosted Checkout    | 3001 | Customer UI           |
+| PostgreSQL         | 5432 | Persistent storage    |
 
 ---
 
 ## Technology Stack
 
-### Frontend
-- React.js (Vite)
-- React Router DOM
-- Fetch API
-- Custom CSS
-- Nginx (production build)
-
-### Backend
-- Node.js (v18)
-- Express.js
-- Custom validation utilities
-- Environment-based configuration
-
-### Database
-- PostgreSQL (v15)
-
-### DevOps & Containerization
-- Docker
-- Docker Compose
-- Nginx
+**Frontend:** React (Vite), React Router, Fetch API, Custom CSS, Nginx
+**Backend:** Node.js (v18), Express.js, Validation Utilities
+**Database:** PostgreSQL (v15)
+**DevOps:** Docker, Docker Compose, Nginx
 
 ---
 
 ## Architecture Overview
 
-The system follows a **service-oriented architecture**:
+* **Merchant Dashboard:** View API credentials, stats, and transactions
+* **Checkout Page:** Public-facing page for customer payments
+* **Backend API:** Handles authentication, order/payment processing, validation, and lifecycle management
+* **Database:** Stores merchants, orders, and payments with relationships and indexing
 
-### Merchant Dashboard (React)
-Used by merchants to view API credentials, statistics, and transactions.
-
-### Checkout Page (React)
-A public-facing hosted checkout used by customers to complete payments.
-
-### Backend API (Express)
-Handles authentication, order management, payment processing, validation, and lifecycle state transitions.
-
-### Database (PostgreSQL)
-Stores merchants, orders, payments, and related metadata with proper relationships and indexes.
-
----
-
-## Architecture Diagrams
+**Architecture Diagrams:**
 
 * [System Architecture](docs/images/architecture.png)
 * [Database ERD](docs/images/erd.png)
@@ -172,13 +145,13 @@ Stores merchants, orders, payments, and related metadata with proper relationshi
 
 ## Environment Configuration
 
-Create a `.env` file using the following template:
+Copy `.env.example` to `.env` and configure:
 
 ```env
 DATABASE_URL=postgresql://gateway_user:gateway_pass@postgres:5432/payment_gateway
 PORT=8000
 
-# Test merchant (auto-seeded)
+# Test merchant
 TEST_MERCHANT_EMAIL=test@example.com
 TEST_API_KEY=key_test_abc123
 TEST_API_SECRET=secret_test_xyz789
@@ -189,48 +162,47 @@ TEST_PAYMENT_SUCCESS=true
 TEST_PROCESSING_DELAY=1000
 ```
 
-A sample file is provided as `.env.example`.
-
 ---
 
 ## Payment Flow
 
-1. Merchant creates an order via API  
-2. Customer is redirected to hosted checkout  
-3. Customer selects payment method (UPI / Card)  
-4. Payment enters `processing` state  
-5. Backend simulates bank processing  
-6. Payment resolves to:
-   - **Success** → `/success`
-   - **Failure** → `/failure`
-7. Merchant can view the transaction in the dashboard  
+1. Merchant creates order via API
+2. Customer opens hosted checkout
+3. Selects payment method (UPI / Card)
+4. Payment enters `processing` state
+5. Backend simulates bank processing
+6. Payment completes:
+
+   * **Success →** `/success`
+   * **Failure →** `/failure`
+7. Merchant views transaction in dashboard
 
 ---
 
 ## Testing Failure Scenarios
 
-To force all payments to fail (for demo or evaluation):
+Force all payments to fail (demo purposes):
 
 ```env
 TEST_MODE=true
 TEST_PAYMENT_SUCCESS=false
 ```
 
-Restart only the backend service:
+Restart backend only:
 
 ```bash
 docker-compose restart api
 ```
 
-## Health Check
+---
 
-Verify backend readiness:
+## Health Check
 
 ```bash
 curl http://localhost:8000/health
 ```
 
-Expected response:
+**Response:**
 
 ```json
 {
@@ -239,3 +211,5 @@ Expected response:
   "timestamp": "..."
 }
 ```
+
+Do you want me to do that?
