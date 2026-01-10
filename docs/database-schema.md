@@ -2,27 +2,17 @@
 
 ## Overview
 
-The Payment Gateway Platform uses **PostgreSQL** as its primary database.
-The schema is designed to ensure:
-
-* Data integrity
-* Clear relationships between entities
-* Secure payment tracking
-* Efficient querying for dashboards and analytics
+The Payment Gateway Platform uses **PostgreSQL** as its primary database. The schema is designed for high integrity, clear relational mapping, and efficient analytical querying for merchant dashboards.
 
 ---
 
 ## Entity Relationship Diagram (ERD)
 
-```text
-docs/images/erd.png
-```
-
 ---
 
 ## Tables Overview
 
-The database consists of the following core tables:
+The core of the system is built upon three primary tables:
 
 1. `merchants`
 2. `orders`
@@ -30,80 +20,57 @@ The database consists of the following core tables:
 
 ---
 
-## 1️ merchants Table
+## 1. merchants Table
 
-Stores merchant (business) information and API credentials.
+Stores business identity and API credentials for authentication.
 
-### Table: `merchants`
-
-| Column Name | Type        | Description                   |
-| ----------- | ----------- | ----------------------------- |
-| id          | UUID / TEXT | Primary key                   |
-| email       | TEXT        | Merchant email (unique)       |
-| api_key     | TEXT        | API Key for authentication    |
-| api_secret  | TEXT        | API Secret for authentication |
-| created_at  | TIMESTAMP   | Merchant creation timestamp   |
-
-### Constraints
-
-* `api_key` is unique
-* `api_secret` is unique
+| Column Name | Type | Description |
+| --- | --- | --- |
+| `id` | UUID / TEXT | Primary key |
+| `email` | TEXT | Merchant email (unique) |
+| `api_key` | TEXT | API Key (unique) |
+| `api_secret` | TEXT | API Secret (unique) |
+| `created_at` | TIMESTAMP | Merchant creation timestamp |
 
 ---
 
-## 2️ orders Table
+## 2. orders Table
 
-Stores orders created by merchants.
+Stores transactional intent created by merchants.
 
-### Table: `orders`
+| Column Name | Type | Description |
+| --- | --- | --- |
+| `id` | TEXT | Order ID (e.g., `order_abc123`) |
+| `merchant_id` | UUID / TEXT | Foreign key → `merchants.id` |
+| `amount` | INTEGER | Amount in smallest unit (paise/cents) |
+| `currency` | TEXT | Currency code (e.g., INR) |
+| `status` | TEXT | Current state (created, paid, etc.) |
+| `created_at` | TIMESTAMP | Order creation time |
 
-| Column Name | Type        | Description                      |
-| ----------- | ----------- | -------------------------------- |
-| id          | TEXT        | Order ID (e.g. order_abc123)     |
-| merchant_id | UUID / TEXT | Foreign key → merchants.id       |
-| amount      | INTEGER     | Amount in smallest currency unit |
-| currency    | TEXT        | Currency code (e.g. INR)         |
-| status      | TEXT        | Order status                     |
-| created_at  | TIMESTAMP   | Order creation time              |
-
-### Relationships
-
-* **Many orders belong to one merchant**
-
-### Constraints
-
-* `merchant_id` references `merchants.id`
-* `amount` must be greater than 0
+**Relationships:** Many orders belong to one merchant.
 
 ---
 
-## 3️ payments Table
+## 3. payments Table
 
-Stores payment attempts for orders.
+Stores specific payment attempts associated with an order.
 
-### Table: `payments`
+| Column Name | Type | Description |
+| --- | --- | --- |
+| `id` | TEXT | Payment ID (e.g., `pay_xyz123`) |
+| `order_id` | TEXT | Foreign key → `orders.id` |
+| `merchant_id` | UUID / TEXT | Foreign key → `merchants.id` |
+| `amount` | INTEGER | Payment amount |
+| `method` | TEXT | Payment method (upi / card) |
+| `status` | TEXT | processing / success / failed |
+| `vpa` | TEXT | UPI VPA (UPI only) |
+| `card_network` | TEXT | Visa, MasterCard, etc. (Card only) |
+| `card_last4` | TEXT | Masked card digits (Card only) |
+| `failure_code` | TEXT | Error code if failed |
+| `created_at` | TIMESTAMP | Attempt timestamp |
+| `updated_at` | TIMESTAMP | Last status update |
 
-| Column Name    | Type        | Description                           |
-| -------------- | ----------- | ------------------------------------- |
-| id             | TEXT        | Payment ID (e.g. pay_xyz123)          |
-| order_id       | TEXT        | Foreign key → orders.id               |
-| merchant_id    | UUID / TEXT | Foreign key → merchants.id            |
-| amount         | INTEGER     | Payment amount                        |
-| currency       | TEXT        | Currency code                         |
-| method         | TEXT        | Payment method (upi / card)           |
-| status         | TEXT        | processing / success / failed         |
-| vpa            | TEXT        | UPI VPA (only for UPI payments)       |
-| card_network   | TEXT        | Card network (Visa, MasterCard, etc.) |
-| card_last4     | TEXT        | Last 4 digits of card number          |
-| failure_code   | TEXT        | Failure reason code (if any)          |
-| failure_reason | TEXT        | Failure description                   |
-| created_at     | TIMESTAMP   | Payment creation time                 |
-| updated_at     | TIMESTAMP   | Last status update time               |
-
-### Relationships
-
-* **One order can have multiple payments**
-* **Each payment belongs to one merchant**
+**Relationships:** One order can have multiple payment attempts; each payment belongs to one merchant.
 
 ---
 
@@ -113,72 +80,20 @@ Stores payment attempts for orders.
 merchants (1) ────< orders (many)
 merchants (1) ────< payments (many)
 orders    (1) ────< payments (many)
+
 ```
 
 ---
 
-## Data Integrity & Validation
+## Data Integrity & Security
 
-### Referential Integrity
-
-* Foreign keys ensure valid merchant and order references
-* Orphan payments are not allowed
-
-### Business Rules
-
-* Payments must reference a valid order
-* Orders must belong to a valid merchant
-* Payment amount must match order amount
-* Card CVV is never stored
-* Only last 4 digits of card are persisted
-
----
-
-## Indexing Strategy
-
-Recommended indexes:
-
-* `merchants.api_key`
-* `orders.merchant_id`
-* `payments.order_id`
-* `payments.merchant_id`
-* `payments.status`
-
-These indexes optimize:
-
-* Dashboard analytics
-* Transaction listing
-* Payment status polling
-
----
-
-## Security Considerations
-
-* No sensitive card data stored
-* API secrets never exposed via public endpoints
-* Public checkout queries only return limited fields
-* Database credentials injected via environment variables
+* **Referential Integrity:** Foreign keys prevent orphan payments and ensure valid merchant links.
+* **Business Logic:** Payment amounts must match order amounts for successful reconciliation.
+* **Security:** **CVV and full card numbers are never stored.** Only the last 4 digits and network are persisted for identification.
+* **Indexing:** Core indexes are applied to `api_key`, `merchant_id`, and `order_id` to ensure sub-second response times for dashboards and status polling.
 
 ---
 
 ## Extensibility
 
-The schema is designed to support:
-
-* Refunds table (future)
-* Webhook events
-* Multi-currency support
-* Real payment gateway integration
-
----
-
-## Summary
-
-This database schema provides:
-
-* Clear entity separation
-* Strong data integrity
-* Secure payment handling
-* Scalable foundation for a production payment gateway
-
----
+The schema is built to accommodate future features such as a `refunds` table, `webhooks` logging, and multi-currency conversion logs without requiring a complete redesign.
