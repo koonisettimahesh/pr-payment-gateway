@@ -6,7 +6,7 @@
 /* ===== PAGE ===== */
 .dashboard-page {
   min-height: 100vh;
-  background: beige; /* was #f2f4f7 */
+  background: #f5f5f5; /* was beige */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* IMPORTANT: allow scrolling */
@@ -36,17 +36,17 @@
 .dashboard-header h1 {
   margin: 0;
   font-size: 26px;
-  color: olive; /* was #914c84 */
+  color: #1f2937; /* was olive */
 }
 
 /* Button */
 .link {
-  background-color: olive; /* was #914c84 */
+  background-color: #14b8a6; /* was olive */
   padding: 10px 16px;
   border-radius: 10px;
   font-size: 14px;
   text-decoration: none;
-  color: black; /* was #ffffff */
+  color: #ffffff; /* was black */
   font-weight: 500;
   white-space: nowrap;
 }
@@ -57,7 +57,7 @@
 
 /* ===== API CARD ===== */
 .card {
-  background: beige; /* was #ffffff */
+  background: #ffffff; /* was beige */
   border-radius: 14px;
   padding: 24px;
   margin-bottom: 28px;
@@ -70,7 +70,7 @@
   margin-top: 0;
   margin-bottom: 18px;
   font-size: 18px;
-  color: olive; /* was #8b5e83 */
+  color: #1f2937; /* was olive */
 }
 
 /* Credentials */
@@ -82,17 +82,17 @@
 
 .credential label {
   font-size: 12px;
-  color: olive; /* was #6b7280 */
+  color: #6b7280; /* was olive */
   margin-bottom: 6px;
 }
 
 .credential span {
   font-family: monospace;
-  background: beige; /* was #f7f8fa */
+  background: #f3f4f6; /* was beige */
   padding: 12px 14px;
   border-radius: 10px;
   font-size: 14px;
-  color: black; /* was #111827 */
+  color: #1f2937; /* was black */
 
   /* allow wrapping on small screens */
   word-break: break-all;
@@ -106,7 +106,7 @@
 }
 
 .stat-card {
-  background: beige; /* was #ffffff */
+  background: #ffffff; /* was beige */
   border-radius: 14px;
   padding: 22px 18px;
   text-align: center;
@@ -117,14 +117,14 @@
 .stat-label {
   display: block;
   font-size: 13px;
-  color: olive; /* was #6b7280 */
+  color: #6b7280; /* was olive */
   margin-bottom: 8px;
 }
 
 .stat-value {
   font-size: 26px;
   font-weight: 700;
-  color: olive; /* was #914c84 */
+  color: #14b8a6; /* was olive */
 }
 
 /* ===== RESPONSIVE BREAKPOINTS ===== */
