@@ -1,0 +1,196 @@
+/* ===== CHECKOUT CONTAINER ===== */
+[data-test-id="checkout-container"] {
+  min-height: 100vh;
+  background: #f2f4f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: system-ui, sans-serif;
+}
+
+/* ===== CARD ===== */
+.checkout-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== ORDER SUMMARY ===== */
+[data-test-id="order-summary"] h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #914c84;
+}
+
+/* ===== METHODS ===== */
+[data-test-id="payment-methods"] {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+[data-test-id="payment-methods"] button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #e9d7e6;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* ===== FORMS ===== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+button[type="submit"] {
+  background: #914c84;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ===== PROCESSING ===== */
+[data-test-id="processing-state"] {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* ===== RESULT PAGES ===== */
+.result-page {
+  min-height: 100vh;
+  background: #f2f4f7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: system-ui;
+  text-align: center;
+}
+
+.result-page.success h2 {
+  color: #15803d;
+}
+
+.result-page.failure h2 {
+  color: #b91c1c;
+}
+
+.result-page button {
+  margin-top: 16px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  background: #914c84;
+  color: white;
+}
+
+/* ===== RESULT WRAPPER ===== */
+.result-wrapper {
+  min-height: 100vh;
+  background: #f2f4f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: system-ui, sans-serif;
+}
+
+/* ===== RESULT CARD ===== */
+.result-card {
+  background: #ffffff;
+  max-width: 420px;
+  width: 100%;
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== SUCCESS ===== */
+.result-card.success h2 {
+  color: #15803d;
+  margin-bottom: 12px;
+}
+
+/* Tick Icon */
+.success-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 28px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Text */
+.result-id {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.result-id span {
+  margin-left: 6px;
+  font-family: monospace;
+}
+
+.result-message {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.result-card.failure h2 {
+  color: #b91c1c;
+}
+
+.failure-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 28px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.retry-btn {
+  margin-top: 20px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: #914c84;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.retry-btn:hover {
+  opacity: 0.9;
+}
+
