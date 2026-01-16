@@ -45,6 +45,12 @@ services:
       TEST_MODE: "false"
       TEST_PAYMENT_SUCCESS: "true"
       TEST_PROCESSING_DELAY: "1000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     depends_on:
       postgres:
         condition: service_healthy
