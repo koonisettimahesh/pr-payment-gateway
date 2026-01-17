@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -35,16 +35,20 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: postgresql://gateway_user:gateway_pass@postgres:5432/payment_gateway
-      REDIS_URL: redis://redis:6379
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
       PORT: 8000
-      # Test merchant (required)
+
+      TEST_MODE: "true"
+      TEST_PAYMENT_SUCCESS: "true"
+      TEST_PROCESSING_DELAY: "1000"
+      WEBHOOK_RETRY_INTERVALS_TEST: "true"
+
       TEST_MERCHANT_EMAIL: test@example.com
       TEST_API_KEY: key_test_abc123
       TEST_API_SECRET: secret_test_xyz789
-      # Test mode
-      TEST_MODE: "false"
-      TEST_PAYMENT_SUCCESS: "true"
-      TEST_PROCESSING_DELAY: "1000"
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
       interval: 10s
@@ -64,7 +68,14 @@ services:
     container_name: gateway_worker
     environment:
       DATABASE_URL: postgresql://gateway_user:gateway_pass@postgres:5432/payment_gateway
-      REDIS_URL: redis://redis:6379
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+      TEST_MODE: "true"
+      TEST_PAYMENT_SUCCESS: "true"
+      TEST_PROCESSING_DELAY: "1000"
+      WEBHOOK_RETRY_INTERVALS_TEST: "true"
     depends_on:
       postgres:
         condition: service_healthy
