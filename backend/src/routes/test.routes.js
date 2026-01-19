@@ -1,5 +1,6 @@
 import express from "express";
 import { pool } from "../config/db.js";
+import { paymentQueue, refundQueue, webhookQueue } from "../queues/index.js";
 
 const router = express.Router();
 
@@ -27,6 +28,22 @@ router.get("/merchant", async (req, res) => {
     email: rows[0].email,
     api_key: rows[0].api_key,
     seeded: true
+  });
+});
+
+router.get("/jobs/status", async (req, res) => {
+  const [p, r, w] = await Promise.all([
+    paymentQueue.getJobCounts(),
+    refundQueue.getJobCounts(),
+    webhookQueue.getJobCounts()
+  ]);
+
+  res.json({
+    pending: p.waiting + r.waiting + w.waiting,
+    processing: p.active + r.active + w.active,
+    completed: p.completed + r.completed + w.completed,
+    failed: p.failed + r.failed + w.failed,
+    worker_status: "running"
   });
 });
 
