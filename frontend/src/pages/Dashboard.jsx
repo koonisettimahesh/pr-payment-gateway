@@ -109,6 +109,17 @@ export default function Dashboard() {
           </span>
         </div>
       </section>
+      <div style={{ marginTop: "16px" }}>
+        <Link to="/dashboard/docs" className="link">
+          API Docs
+        </Link>
+
+        {" | "}
+
+        <Link to="/dashboard/webhooks" className="link">
+          Webhooks
+        </Link>
+      </div>
     </div>
   );
 }
