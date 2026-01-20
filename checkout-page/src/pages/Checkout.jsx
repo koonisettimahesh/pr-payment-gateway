@@ -35,7 +35,6 @@ export default function Checkout() {
 
     fetchOrder();
   }, [orderId]);
-  
 
   if (!orderId) {
     return <div>Invalid checkout URL. Missing order_id.</div>;
@@ -179,7 +178,9 @@ export default function Checkout() {
 
           <div>
             <span>Amount: </span>
-            <span data-test-id="order-amount">₹{order.amount / 100}</span>
+            <span data-test-id="order-amount">
+              ₹{(order.amount / 100).toFixed(2)}
+            </span>
           </div>
 
           <div>
@@ -217,7 +218,7 @@ export default function Checkout() {
               required
             />
             <button data-test-id="pay-button" type="submit">
-              Pay ₹{order.amount / 100}
+              Pay ₹{(order.amount / 100).toFixed(2)}
             </button>
           </form>
         )}
@@ -250,7 +251,7 @@ export default function Checkout() {
               required
             />
             <button data-test-id="pay-button" type="submit">
-              Pay ₹{order.amount / 100}
+              Pay ₹{(order.amount / 100).toFixed(2)}
             </button>
           </form>
         )}

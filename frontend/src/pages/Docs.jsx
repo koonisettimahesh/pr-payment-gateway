@@ -11,7 +11,7 @@ const Docs = () => {
       {/* 1. Create Order */}
       <section data-test-id="section-create-order" style={{ marginTop: "24px" }}>
         <h3>1. Create Order</h3>
-        <pre data-test-id="code-snippet-create-order">
+        <pre data-test-id="create-order-code">
           <code>{`curl -X POST http://localhost:8000/api/v1/orders \\
   -H "X-Api-Key: key_test_abc123" \\
   -H "X-Api-Secret: secret_test_xyz789" \\
@@ -30,7 +30,7 @@ const Docs = () => {
         style={{ marginTop: "24px" }}
       >
         <h3>2. SDK Integration</h3>
-        <pre data-test-id="code-snippet-sdk">
+        <pre data-test-id="sdk-integration-code">
           <code>{`<script src="http://localhost:3001/checkout.js"></script>
 <script>
 const checkout = new PaymentGateway({
@@ -51,7 +51,7 @@ checkout.open();
         style={{ marginTop: "24px" }}
       >
         <h3>3. Verify Webhook Signature</h3>
-        <pre data-test-id="code-snippet-webhook">
+        <pre data-test-id="webhook-verification-code">
           <code>{`const crypto = require('crypto');
 
 function verifyWebhook(payload, signature, secret) {

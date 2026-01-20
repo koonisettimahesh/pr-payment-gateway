@@ -7,24 +7,28 @@ export default function Success() {
 
   return (
     <div className="result-wrapper">
-      <div className="result-card success">
+      <div
+        className="result-card success"
+        data-test-id="success-state"
+      >
         <div className="icon success-icon">✓</div>
 
-        <h2>Payment Successful</h2>
+        {/* ❗ Exact heading text required */}
+        <h2>Payment Successful!</h2>
 
-        <p className="result-id">
-          Payment ID:
+        <div>
+          <span>Payment ID: </span>
           <span data-test-id="payment-id">
             {paymentId}
           </span>
-        </p>
+        </div>
 
-        <p
+        <span
           className="result-message"
           data-test-id="success-message"
         >
-          Your payment has been processed successfully.
-        </p>
+          Your payment has been processed successfully
+        </span>
       </div>
     </div>
   );

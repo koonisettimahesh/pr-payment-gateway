@@ -8,17 +8,20 @@ export default function Failure() {
 
   return (
     <div className="result-wrapper">
-      <div className="result-card failure">
+      <div
+        className="result-card failure"
+        data-test-id="error-state"
+      >
         <div className="icon failure-icon">✕</div>
 
         <h2>Payment Failed</h2>
 
-        <p
+        <span
           className="result-message"
           data-test-id="error-message"
         >
           {error}
-        </p>
+        </span>
 
         <button
           className="retry-btn"

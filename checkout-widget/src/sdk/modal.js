@@ -19,7 +19,7 @@ export function createModal(key, orderId) {
           class="close-button"
           type="button"
         >
-          ×
+          x
         </button>
       </div>
     </div>

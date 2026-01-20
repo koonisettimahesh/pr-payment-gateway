@@ -13,21 +13,15 @@ export default function Webhooks() {
   };
 
   async function fetchConfig() {
-    try {
-      // Spec does NOT require this endpoint.
-      // Just show default values safely.
-      setWebhookUrl("");
-      setWebhookSecret("whsec_test_abc123");
-    } catch (err) {
-      console.warn("Webhook config endpoint not implemented");
-    }
+    setWebhookUrl("");
+    setWebhookSecret("whsec_test_abc123");
   }
 
   async function fetchLogs() {
     try {
       const res = await fetch(
         "http://localhost:8000/api/v1/webhooks?limit=10&offset=0",
-        { headers },
+        { headers }
       );
       const data = await res.json();
       setLogs(data.data || []);
@@ -37,7 +31,6 @@ export default function Webhooks() {
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchConfig();
     fetchLogs();
   }, []);
@@ -59,14 +52,24 @@ export default function Webhooks() {
   }
 
   async function regenerateSecret() {
-  alert("Webhook secret regenerated");
-  setWebhookSecret("whsec_test_abc123");
-}
+    const newSecret = "whsec_" + Math.random().toString(36).substring(2, 10);
+    setWebhookSecret(newSecret);
+    alert("Webhook secret regenerated");
+  }
 
   async function sendTestWebhook() {
-  alert("Test webhook sent");
-}
+    try {
+      await fetch("http://localhost:8000/api/v1/webhooks/test", {
+        method: "POST",
+        headers
+      });
 
+      alert("Test webhook sent");
+      fetchLogs();
+    } catch (err) {
+      console.error("Failed to send test webhook", err);
+    }
+  }
 
   async function retryWebhook(id) {
     try {
@@ -87,7 +90,6 @@ export default function Webhooks() {
 
       <form
         data-test-id="webhook-config-form"
-        className="card"
         onSubmit={saveConfig}
       >
         <div className="credential">
@@ -170,13 +172,15 @@ export default function Webhooks() {
               </td>
 
               <td>
-                <button
-                  data-test-id="retry-webhook-button"
-                  data-webhook-id={log.id}
-                  onClick={() => retryWebhook(log.id)}
-                >
-                  Retry
-                </button>
+                {log.status === "failed" && (
+                  <button
+                    data-test-id="retry-webhook-button"
+                    data-webhook-id={log.id}
+                    onClick={() => retryWebhook(log.id)}
+                  >
+                    Retry
+                  </button>
+                )}
               </td>
             </tr>
           ))}

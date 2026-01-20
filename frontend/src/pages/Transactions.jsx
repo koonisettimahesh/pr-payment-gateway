@@ -11,8 +11,8 @@ export default function Transactions() {
       const data = await apiFetch("/api/v1/payments", {
         headers: {
           "X-Api-Key": "key_test_abc123",
-          "X-Api-Secret": "secret_test_xyz789"
-        }
+          "X-Api-Secret": "secret_test_xyz789",
+        },
       });
       setPayments(data);
     }
@@ -48,7 +48,7 @@ export default function Transactions() {
             </thead>
 
             <tbody>
-              {payments.map(p => (
+              {payments.map((p) => (
                 <tr
                   key={p.id}
                   data-test-id="transaction-row"
@@ -56,16 +56,12 @@ export default function Transactions() {
                 >
                   <td data-test-id="payment-id">{p.id}</td>
                   <td data-test-id="order-id">{p.order_id}</td>
-                  <td data-test-id="amount">
-                    ₹{(p.amount / 100).toLocaleString()}
-                  </td>
+                  <td data-test-id="amount">₹{Math.floor(p.amount / 100)}</td>
                   <td data-test-id="method">{p.method}</td>
-                  <td
-                    data-test-id="status"
-                    className={`status ${p.status}`}
-                  >
-                    {p.status}
+                  <td data-test-id="status" className={`status ${p.status}`}>
+                    {p.status.toLowerCase()}
                   </td>
+
                   <td data-test-id="created-at">
                     {new Date(p.created_at).toLocaleString()}
                   </td>
