@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS merchants (
   email VARCHAR(255) UNIQUE NOT NULL,
   api_key VARCHAR(64) UNIQUE NOT NULL,
   api_secret VARCHAR(64) NOT NULL,
-  webhook_url TEXT DEFAULT 'http://localhost:9999/webhook-test',
+  webhook_url TEXT DEFAULT 'http://host.docker.internal:4000/webhook',
   webhook_secret VARCHAR(64) DEFAULT 'whsec_test_abc123',
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
