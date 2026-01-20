@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout</title>
+  <meta charset="UTF-8" />
+</head>
+<body>
+  <h3>Secure Checkout</h3>
+
+  <div id="order-info">Loading order...</div>
+
+  <button id="pay-success">Simulate Success</button>
+  <button id="pay-fail">Simulate Failure</button>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("order_id");
+
+    document.getElementById("order-info").innerText =
+      "Order ID: " + orderId;
+
+    function sendMessageToParent(type, data) {
+      window.parent.postMessage({ type, data }, "*");
+    }
+
+    document.getElementById("pay-success").onclick = () => {
+      sendMessageToParent("payment_success", {
+        paymentId: "pay_" + Date.now()
+      });
+    };
+
+    document.getElementById("pay-fail").onclick = () => {
+      sendMessageToParent("payment_failed", {
+        reason: "Insufficient funds"
+      });
+    };
+  </script>
+</body>
+</html>
