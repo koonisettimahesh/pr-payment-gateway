@@ -3,10 +3,11 @@ const API_BASE =
 
 export async function apiFetch(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
+    ...options,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
     },
-    ...options
   });
 
   const data = await res.json();
