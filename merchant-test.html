@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Merchant Test</title>
+    <script src="http://localhost:3001/checkout.js"></script>
+  </head>
+  <body>
+    <h2>Test Merchant Page</h2>
+
+    <button id="pay-button">Pay Now</button>
+
+    <script>
+      document.getElementById("pay-button").addEventListener("click", function () {
+        const checkout = new PaymentGateway({
+          key: "key_test_abc123",
+          orderId: "order_SuJYHp6MIWyXC24r",
+          onSuccess: function (response) {
+            console.log("Payment success:", response);
+            alert("Payment success: " + response.paymentId);
+          },
+          onFailure: function (error) {
+            console.log("Payment failed:", error);
+            alert("Payment failed");
+          },
+          onClose: function () {
+            console.log("Modal closed");
+          },
+        });
+
+        checkout.open();
+      });
+    </script>
+  </body>
+</html>
