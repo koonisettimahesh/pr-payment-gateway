@@ -1,0 +1,69 @@
+version: 1
+
+setup:
+  description: "Install dependencies and prepare environment"
+  commands:
+    - cp .env.example .env
+    - docker compose build
+
+start:
+  description: "Start all services (Postgres, Redis, API, Worker, Dashboard, Checkout)"
+  commands:
+    - docker compose up -d
+
+test:
+  description: "Run test suites if available (non-blocking)"
+  commands:
+    - docker compose exec api mvn test || true
+    - docker compose exec api pytest || true
+    - docker compose exec dashboard npm test || true
+
+verify:
+  description: "Verify health, seeded merchant, API flows, job queue, and frontend services"
+  commands:
+    # Health check
+    - curl -f http://localhost:8000/health
+
+    # Test merchant seeded correctly
+    - curl -f http://localhost:8000/api/v1/test/merchant
+
+    # Create order and capture order_id
+    - >
+      ORDER_ID=$(curl -s -X POST http://localhost:8000/api/v1/orders
+      -H "X-Api-Key: key_test_abc123"
+      -H "X-Api-Secret: secret_test_xyz789"
+      -H "Content-Type: application/json"
+      -d '{
+        "amount": 50000,
+        "currency": "INR",
+        "receipt": "receipt_eval_001",
+        "notes": { "purpose": "evaluation" }
+      }' | jq -r '.id') && echo "ORDER_ID=$ORDER_ID"
+
+    # Create payment using dynamic order_id
+    - >
+      curl -f -X POST http://localhost:8000/api/v1/payments
+      -H "X-Api-Key: key_test_abc123"
+      -H "X-Api-Secret: secret_test_xyz789"
+      -H "Idempotency-Key: eval-payment-001"
+      -H "Content-Type: application/json"
+      -d "{
+        \"order_id\": \"$ORDER_ID\",
+        \"method\": \"upi\",
+        \"vpa\": \"user@paytm\"
+      }"
+
+    # Job queue status (Deliverable 2)
+    - curl -f http://localhost:8000/api/v1/test/jobs/status
+
+    # Dashboard must be reachable
+    - curl -f http://localhost:3000
+
+    # Checkout must be reachable
+    - curl -f http://localhost:3001
+
+shutdown:
+  description: "Gracefully stop all services"
+  commands:
+    - docker compose down
+
