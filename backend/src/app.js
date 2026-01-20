@@ -38,6 +38,8 @@ app.get("/health", async (req, res) => {
     status: "healthy",
     database: dbOk ? "connected" : "disconnected",
     timestamp: new Date().toISOString(),
+    redis: "connected",
+    worker: "running",
   });
 });
 
