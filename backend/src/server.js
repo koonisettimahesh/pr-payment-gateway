@@ -8,9 +8,11 @@ async function bootstrap() {
   await pool.query(fs.readFileSync("./src/db/schema.sql").toString());
   await seedTestMerchant();
 
-  app.listen(8000, () =>
-    console.log("API running on port 8000")
-  );
+  const PORT = process.env.PORT || 8000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`API running on port ${PORT}`);
+});
 }
 
 bootstrap().catch(err => {
