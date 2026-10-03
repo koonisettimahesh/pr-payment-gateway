@@ -9,7 +9,10 @@ app.post('/webhook', (req, res) => {
   const payload = JSON.stringify(req.body);
 
   const expectedSignature = crypto
-    .createHmac('sha256', 'whsec_test_abc123')
+    .createHmac(
+      'sha256',
+      'whsec_test_1f969752537297d5a3604e5c2a4e6620920ec731f11dc640'
+    )
     .update(payload)
     .digest('hex');
 

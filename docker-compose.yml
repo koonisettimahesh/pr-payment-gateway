@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   postgres:
-    image: postgres:15-alpine
+    image: postgres:17
     container_name: pg_gateway
     environment:
       POSTGRES_DB: payment_gateway
@@ -49,8 +49,10 @@ services:
       TEST_MERCHANT_EMAIL: test@example.com
       TEST_API_KEY: key_test_abc123
       TEST_API_SECRET: secret_test_xyz789
+
+      JWT_SECRET: ${JWT_SECRET}
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8000/health"]
       interval: 10s
       timeout: 5s
       retries: 5

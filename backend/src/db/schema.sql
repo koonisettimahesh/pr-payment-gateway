@@ -4,10 +4,26 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- =========================
+-- PROVIDER USERS
+-- =========================
+CREATE TABLE IF NOT EXISTS provider_users (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash TEXT,
+    google_id VARCHAR(255) UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =========================
 -- MERCHANTS
 -- =========================
 CREATE TABLE IF NOT EXISTS merchants (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  provider_id UUID NOT NULL
+    REFERENCES provider_users(id)
+    ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL,
   api_key VARCHAR(64) UNIQUE NOT NULL,
@@ -18,7 +34,6 @@ CREATE TABLE IF NOT EXISTS merchants (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 
 -- =========================
 -- ORDERS

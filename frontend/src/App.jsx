@@ -4,6 +4,9 @@ import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Docs from "./pages/Docs";
 import Webhooks from "./pages/Webhooks";
+import ProviderLogin from "./pages/ProviderLogin";
+import ProviderDashboard from "./pages/ProviderDashboard";
+import Merchants from "./pages/Merchants";
 
 export default function App() {
   return (
@@ -14,6 +17,10 @@ export default function App() {
       <Route path="/dashboard/transactions" element={<Transactions />} />
       <Route path="/dashboard/docs" element={<Docs />} />
       <Route path="/dashboard/webhooks" element={<Webhooks />} />
+
+      <Route path="/provider/login" element={<ProviderLogin />} />
+      <Route path="/provider/dashboard" element={<ProviderDashboard />} />
+      <Route path="/provider/merchants" element={<Merchants />} />
 
       {/* Fallback should NOT send to login */}
       <Route path="*" element={<Navigate to="/dashboard" />} />

@@ -92,16 +92,30 @@ router.post("/", authenticateMerchant, async (req, res, next) => {
     };
 
     /* ---------- Emit webhooks ---------- */
+    const timestamp = Math.floor(Date.now() / 1000);
+
     await webhookQueue.add("deliver", {
       merchantId: merchant.id,
       event: "payment.created",
-      payload: { payment: response },
+      payload: {
+        event: "payment.created",
+        timestamp,
+        data: {
+          payment: response,
+        },
+      },
     });
 
     await webhookQueue.add("deliver", {
       merchantId: merchant.id,
       event: "payment.pending",
-      payload: { payment: response },
+      payload: {
+        event: "payment.pending",
+        timestamp,
+        data: {
+          payment: response,
+        },
+      },
     });
 
     /* ---------- Enqueue payment processing ---------- */

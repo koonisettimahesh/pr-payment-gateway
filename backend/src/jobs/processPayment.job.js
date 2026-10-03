@@ -46,18 +46,6 @@ export async function processPaymentJob(paymentId) {
     );
   }
 
-  /* ================= WEBHOOK LOGIC ================= */
-
-  // Fetch merchant webhook config
-  const merchantRes = await pool.query(
-    `SELECT webhook_url FROM merchants WHERE id = $1`,
-    [payment.merchant_id]
-  );
-
-  if (!merchantRes.rows.length || !merchantRes.rows[0].webhook_url) {
-    return; // no webhook configured → correct behavior
-  }
-
   const webhookPayload = {
     event: success ? "payment.success" : "payment.failed",
     timestamp: Math.floor(Date.now() / 1000),
@@ -69,29 +57,14 @@ export async function processPaymentJob(paymentId) {
         currency: payment.currency,
         method: payment.method,
         status: success ? "success" : "failed",
-        created_at: payment.created_at
-      }
-    }
+        created_at: payment.created_at,
+      },
+    },
   };
 
-  // 1️⃣ create webhook_logs row
-  const webhookLogRes = await pool.query(
-    `
-    INSERT INTO webhook_logs
-      (merchant_id, event, payload, status, attempts)
-    VALUES
-      ($1, $2, $3, 'pending', 0)
-    RETURNING id
-    `,
-    [
-      payment.merchant_id,
-      webhookPayload.event,
-      webhookPayload
-    ]
-  );
-
-  const webhookId = webhookLogRes.rows[0].id;
-
-  // 2️⃣ enqueue delivery job
-  await webhookQueue.add("deliver", { webhookId });
+  await webhookQueue.add("deliver", {
+    merchantId: payment.merchant_id,
+    event: webhookPayload.event,
+    payload: webhookPayload,
+  });
 }

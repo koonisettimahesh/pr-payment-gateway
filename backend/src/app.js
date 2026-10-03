@@ -8,6 +8,8 @@ import publicPaymentRoutes from "./routes/payments.public.routes.js";
 import cors from "cors";
 import refundRoutes from "./routes/refunds.routes.js";
 import webhookRoutes from "./routes/webhooks.routes.js";
+import merchantRoutes from "./routes/merchants.route.js";
+import providerAuthRoutes from "./routes/providerAuth.routes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -44,6 +46,8 @@ app.get("/health", async (req, res) => {
 });
 
 app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/merchants", merchantRoutes);
+app.use("/api/v1/provider/auth", providerAuthRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/payments", refundRoutes);
 app.use("/api/v1/test", testRoutes);
