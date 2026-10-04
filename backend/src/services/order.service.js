@@ -13,6 +13,14 @@ export async function createOrderService(body, merchant) {
     );
   }
 
+  if (currency !== "INR") {
+    throw apiError(
+      400,
+      "BAD_REQUEST_ERROR",
+      "currency must be INR"
+    );
+  }
+
   let orderId;
   do {
     orderId = generateOrderId();

@@ -14,20 +14,34 @@ export async function findMerchantByEmail(email) {
 }
 
 export async function createMerchant(merchant) {
+  const columns = [
+    "id",
+    "provider_id",
+    "name",
+    "email",
+    "api_key",
+    "api_secret",
+    "webhook_secret",
+  ];
+  const values = [
+    merchant.id,
+    merchant.provider_id,
+    merchant.name,
+    merchant.email,
+    merchant.api_key,
+    merchant.api_secret,
+    merchant.webhook_secret,
+  ];
+
+  if (merchant.webhook_url !== undefined && merchant.webhook_url !== null) {
+    columns.push("webhook_url");
+    values.push(merchant.webhook_url);
+  }
+
   const { rows } = await pool.query(
     `
-    INSERT INTO merchants
-    (
-      id,
-      provider_id,
-      name,
-      email,
-      api_key,
-      api_secret,
-      webhook_secret
-    )
-    VALUES
-    ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO merchants (${columns.join(", ")})
+    VALUES (${values.map((_, index) => `$${index + 1}`).join(", ")})
     RETURNING
       id,
       provider_id,
@@ -39,15 +53,7 @@ export async function createMerchant(merchant) {
       is_active,
       created_at
     `,
-    [
-      merchant.id,
-      merchant.provider_id,
-      merchant.name,
-      merchant.email,
-      merchant.api_key,
-      merchant.api_secret,
-      merchant.webhook_secret
-    ]
+    values
   );
 
   return rows[0];

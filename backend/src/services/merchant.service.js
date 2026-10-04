@@ -14,7 +14,7 @@ import {
 import crypto from "crypto";
 
 export async function registerMerchant(body, providerId) {
-  const { name, email } = body;
+  const { name, email, webhook_url } = body;
 
   if (!name || !name.trim()) {
     throw apiError(
@@ -49,6 +49,7 @@ export async function registerMerchant(body, providerId) {
     provider_id: providerId,
     name: name.trim(),
     email: normalizedEmail,
+    webhook_url,
     api_key: generateApiKey(),
     api_secret: generateApiSecret(),
     webhook_secret: generateWebhookSecret(),

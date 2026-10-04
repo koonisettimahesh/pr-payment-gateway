@@ -130,6 +130,13 @@ router.post("/", async (req, res, next) => {
       }
 
       cardNetwork = detectCardNetwork(cleanedNumber);
+      if (cardNetwork === "unknown") {
+        throw apiError(
+          400,
+          "INVALID_CARD",
+          "Card validation failed"
+        );
+      }
       cardLast4 = cleanedNumber.slice(-4);
     }
 

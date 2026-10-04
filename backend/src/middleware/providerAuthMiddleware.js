@@ -20,6 +20,16 @@ export async function authenticateProvider(req, res, next) {
 
     const payload = verifyProviderToken(token);
 
+    if (payload.role !== "provider") {
+      return next(
+        apiError(
+          401,
+          "AUTHENTICATION_ERROR",
+          "Invalid provider token"
+        )
+      );
+    }
+
     const provider = await findProviderById(payload.sub);
 
     if (!provider) {
