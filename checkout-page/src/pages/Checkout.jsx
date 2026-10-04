@@ -43,17 +43,9 @@ export default function Checkout() {
   function pollPayment(paymentId) {
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(
-          `http://localhost:8000/api/v1/payments/${paymentId}`,
-          {
-            headers: {
-              "X-Api-Key": "key_test_abc123",
-              "X-Api-Secret": "secret_test_xyz789",
-            },
-          },
+        const data = await apiFetch(
+          `/api/v1/payments/public/${paymentId}?order_id=${encodeURIComponent(orderId)}`
         );
-
-        const data = await res.json();
 
         // 🔹 Deliverable-2 async status check
         if (data.status !== "pending") {
@@ -97,10 +89,6 @@ export default function Checkout() {
     try {
       const res = await apiFetch("/api/v1/payments/public", {
         method: "POST",
-        headers: {
-          "X-Api-Key": "key_test_abc123",
-          "X-Api-Secret": "secret_test_xyz789",
-        },
         body: JSON.stringify({
           order_id: orderId,
           method: "upi",
@@ -134,12 +122,8 @@ export default function Checkout() {
     const fullYear = year.length === 2 ? `20${year}` : year;
 
     try {
-      const res = await apiFetch("/api/v1/payments", {
+      const res = await apiFetch("/api/v1/payments/public", {
         method: "POST",
-        headers: {
-          "X-Api-Key": "key_test_abc123",
-          "X-Api-Secret": "secret_test_xyz789",
-        },
         body: JSON.stringify({
           order_id: orderId,
           method: "card",

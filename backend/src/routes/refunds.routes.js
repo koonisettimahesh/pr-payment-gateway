@@ -100,13 +100,17 @@ router.post(
         merchantId: merchant.id,
         event: "refund.created",
         payload: {
-          refund: {
-            id: refundId,
-            payment_id,
-            amount,
-            reason,
-            status: "pending",
-            created_at: new Date().toISOString(),
+          event: "refund.created",
+          timestamp: Math.floor(Date.now() / 1000),
+          data: {
+            refund: {
+              id: refundId,
+              payment_id,
+              amount,
+              reason: reason || null,
+              status: "pending",
+              created_at: new Date().toISOString(),
+            },
           },
         },
       });

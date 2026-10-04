@@ -56,6 +56,20 @@ export async function processRefundJob(refundId) {
   await webhookQueue.add("deliver", {
     merchantId: refund.merchant_id,
     event: "refund.processed",
-    payload: refund,
+    payload: {
+      event: "refund.processed",
+      timestamp: Math.floor(Date.now() / 1000),
+      data: {
+        refund: {
+          id: refund.id,
+          payment_id: refund.payment_id,
+          amount: refund.amount,
+          reason: refund.reason,
+          status: "processed",
+          created_at: refund.created_at,
+          processed_at: new Date().toISOString(),
+        },
+      },
+    },
   });
 }
